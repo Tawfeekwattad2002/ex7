@@ -3,7 +3,8 @@ TOKEN_P1 = 'X'
 TOKEN_P2 = 'O'
 
 HUMAN = 1
-COMPUTER = 2
+COMPUTER_RANDOM = 2
+COMPUTER_STRATEGIC = 3
 
 
 def get_board_dimensions():
@@ -158,7 +159,14 @@ def human_choose_tictactoe(board):
             print("Invalid input. Enter a number.")
 
 
-def computer_choose(board, cols, rows, my_token, opp_token, connect_n):
+def computer_random_choose(board, cols, rows):
+    for col in range(cols):
+        if not is_column_full(board, col, rows, cols):
+            return col
+    return 0
+
+
+def computer_strategic_choose(board, cols, rows, my_token, opp_token, connect_n):
     directions = [(0, 1), (1, 0), (1, 1), (1, -1)]
 
     order = list(range(cols))
@@ -282,16 +290,18 @@ def is_board_full_tictactoe(board):
 
 def get_player_type(player_number):
     while True:
-        ch = input(f"Choose type for player {player_number}: h - human, c - computer: ").strip()
+        ch = input(f"Choose type for player {player_number}: h - human, r - random/simple computer, s - strategic computer: ").strip()
         if not ch:
             print("Input error. Try again.")
             continue
         ch = ch[0].lower()
         if ch == 'h':
             return HUMAN
-        if ch == 'c':
-            return COMPUTER
-        print("Invalid selection. Enter h or c.")
+        if ch == 'r':
+            return COMPUTER_RANDOM
+        if ch == 's':
+            return COMPUTER_STRATEGIC
+        print("Invalid selection. Enter h, r, or s.")
 
 
 def run_connect_four(board, rows, cols, p1_type, p2_type, connect_n):
@@ -307,9 +317,12 @@ def run_connect_four(board, rows, cols, p1_type, p2_type, connect_n):
 
         if types[current_player] == HUMAN:
             col = human_choose(board, cols, rows)
+        elif types[current_player] == COMPUTER_RANDOM:
+            col = computer_random_choose(board, cols, rows)
+            print(f"Computer chose column {col + 1}")
         else:
-            col = computer_choose(board, cols, rows, tokens[current_player],
-                                  tokens[1 - current_player], connect_n)
+            col = computer_strategic_choose(board, cols, rows, tokens[current_player],
+                                            tokens[1 - current_player], connect_n)
             print(f"Computer chose column {col + 1}")
 
         row = make_move(board, col, rows, cols, token)
@@ -363,7 +376,7 @@ def main():
         print_board_tictactoe(board)
         run_tictactoe(board)
     else:
-        print(f"\nConnect Four ({rows} rows x {cols} cols) - {connect_n} in a row to win!\n")
+        print(f"Connect Four - Or More [Or Less] ({rows} rows x {cols} cols, connect {connect_n})")
         p1_type = get_player_type(1)
         p2_type = get_player_type(2)
         board = init_board(rows, cols)

@@ -9,12 +9,12 @@ COMPUTER = 2
 def get_board_dimensions():
     while True:
         try:
-            rows = int(input("Enter number of rows (2-100): ").strip())
+            rows = int(input("Enter number of rows\n").strip())
             if rows < 2 or rows > 100:
                 print("Invalid rows. Must be between 2 and 100.")
                 continue
 
-            cols = int(input("Enter number of columns (2-100): ").strip())
+            cols = int(input("Enter number of columns\n").strip())
             if cols < 2 or cols > 100:
                 print("Invalid columns. Must be between 2 and 100.")
                 continue
@@ -143,7 +143,7 @@ def human_choose(board, cols, rows):
 def human_choose_tictactoe(board):
     while True:
         try:
-            cell = int(input("Enter cell (1-9): "))
+            cell = int(input("Enter position (1-9):\n"))
 
             if cell < 1 or cell > 9:
                 print("Invalid cell. Choose between 1 and 9.")
@@ -265,13 +265,11 @@ def print_board(board, rows, cols):
 
 
 def print_board_tictactoe(board):
-    print()
     for r in range(3):
         print("|", end="")
         for c in range(3):
             print(board[r][c], end="|")
         print()
-    print()
 
 
 def is_board_full_tictactoe(board):
@@ -336,8 +334,6 @@ def run_tictactoe(board):
         player_num = current_player + 1
         token = tokens[current_player]
 
-        print(f"Player {player_num} ({token}) turn.")
-
         cell = human_choose_tictactoe(board)
         row, col = make_move_tictactoe(board, cell, token)
 
@@ -362,7 +358,7 @@ def main():
         rows = 3
         cols = 3
         connect_n = 3
-        print("\nTic-Tac-Toe (3x3): Both players must be human.")
+        print("Tic Tac Toe (Human vs Human)")
         board = init_board(rows, cols)
         print_board_tictactoe(board)
         run_tictactoe(board)
